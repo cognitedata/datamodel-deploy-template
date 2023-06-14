@@ -1,0 +1,98 @@
+name: Publish data models
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-matrix:
+    uses: "./.github/workflows/generate-matrix.yaml"
+    with:
+      deploy_folders: "MovieDM"
+      trigger_deploy_all_folders: "common"
+
+  deploy:
+    needs: generate-matrix
+    name: Deploy Cognite data models
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        datamodel: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
+        # Add environments to deploy to.
+        # Each environment should have a corresponding github environment with secrets.
+        environment:
+          - test
+
+    environment: ${{ matrix.environment }}
+
+    steps:
+      - name: Check out code
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        uses: actions/checkout@v3
+
+      - name: Setup Node 🔧
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        uses: actions/setup-node@v3
+
+      - name: Install 🔧
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        run: npm install --global @cognite/cdf-cli
+
+      - name: Install yq
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.27.5/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Extract config file parameters
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        shell: bash
+        run: |
+          CONFIG_FILES=("datamodels/${{ matrix.datamodel }}/datamodel_config.yaml ${{ matrix.datamodel }}/datamodel_config_${{ matrix.environment }}.yaml")
+          echo "Config files to use are ${CONFIG_FILES[@]}"
+          for FILE in ${CONFIG_FILES[@]}
+          do
+            echo $FILE
+            if [ ! -f $FILE ]; then
+                echo "Config: $FILE not supplied!"
+            else
+                ALLKEYS=$(yq -o=tsv "keys" $FILE)
+                for CONFIGURATION in $ALLKEYS
+                do
+                    VALUE=$(yq -o=json -I=0 ".$CONFIGURATION" $FILE | sed -e 's/^"//' -e 's/"$//')
+                    echo $CONFIGURATION=$VALUE >> $GITHUB_OUTPUT
+                done
+            fi
+          done
+        id: extract_params
+
+      # verify that space exists
+      - name: Verify space
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        shell: bash
+        env:
+          COGNITE_CLIENT_ID: ${{ vars.COGNITE_CLIENT_ID }}
+          COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
+          COGNITE_CLUSTER: ${{ vars.COGNITE_CLUSTER }}
+          COGNITE_TENANT_ID: ${{ vars.COGNITE_TENANT_ID }}
+          COGNITE_PROJECT: ${{ vars.COGNITE_PROJECT }}
+        run: |
+          pip install cognite-sdk==6.4.0
+          python build_scripts/deploy_space.py --space "${{ steps.extract_params.outputs.space }}" 
+
+
+      # add more data models like this:
+      - name: Deploy data model
+        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        uses: "./.github/actions/datamodel-action"
+        with:
+          clientId: ${{ vars.COGNITE_CLIENT_ID }}
+          clientSecret: ${{ secrets.COGNITE_CLIENT_SECRET }}
+          cluster: ${{ vars.COGNITE_CLUSTER }}
+          tenantId: ${{ vars.COGNITE_TENANT_ID }}
+          modelName: ${{ matrix.datamodel }} # external_id
+          modelFile: ./datamodels/${{ matrix.datamodel }}/datamodel.graphql
+          space: ${{ steps.extract_params.outputs.space }}
+          project: ${{ vars.COGNITE_PROJECT }}
+          version: ${{ steps.extract_params.outputs.version }}

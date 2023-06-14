@@ -1,0 +1,46 @@
+name: Generate datamodel deployment matrix
+
+on:
+  workflow_call:
+    inputs:
+      deploy_folders:
+        description: List of function folders to be deployed
+        type: string
+        required: true
+      trigger_deploy_all_folders:
+        description: |
+          List of folders with dependencies (e.g. common) that will
+          trigger deployment of all functions if updated.
+        type: string
+        required: false
+    outputs:
+      matrix:
+        value: ${{ jobs.generate-matrix.outputs.matrix }}
+        description:
+      folders:
+        value: ${{ jobs.generate-matrix.outputs.folders }}
+        description: |
+          a json string in the format ["function1", "function2"] - can be used as
+          strategy.matrix.function: { fromJson(needs.generate-matrix.outputs.folders) }
+      deploy_folders:
+        value: ${{ inputs.deploy_folders }}
+        description: Value of the input deploy_folders
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.make-json.outputs.matrix }}
+      folders: ${{ steps.make-json.outputs.folders }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@v3.3.0
+        with:
+          fetch-depth: 3
+
+      - name: Generate deployment matrix
+        shell: bash
+        id: make-json
+        run: |
+          python build_scripts/changed_models.py "${{ inputs.deploy_folders }}" "${{ inputs.trigger_deploy_all_folders }}"
+          cat $GITHUB_OUTPUT
