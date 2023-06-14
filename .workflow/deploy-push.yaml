@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   generate-matrix:
     uses: "./.github/workflows/generate-matrix.yaml"
@@ -27,9 +26,6 @@ jobs:
 
     environment: ${{ matrix.environment }}
 
-    # TODO add more environments (test/prod) later
-    environment: ${{ matrix.eqn_project }}
-
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -45,12 +41,12 @@ jobs:
       - name: Deploy data model
         uses: @cognitedata/datamodel-action
         with:
-          clientId: ${{ secrets.COGNITE_DEV_CLIENT_ID }}
-          clientSecret: ${{ secrets.COGNITE_DEV_CLIENT_SECRET }}
-          cluster: "westeurope-1"
-          tenantId: ""
+          clientId: $COGNITE_ID
+          clientSecret: $COGNITE_SECRET
+          cluster: $COGNITE_CLUSTER
+          tenantId: $COGNITE_TENANT_ID
           modelName: $matrix.datamodel # external_id
           modelFile: ./datamodels/${{ matrix.datamodel }}/datamodel.graphql
-          space: ""
-          project: ${{  }}
-          version: 
+          space: "Movie"
+          project: $COGNITE_PROJECT
+          version:  7
