@@ -38,7 +38,7 @@ jobs:
       
       # add more data models like this:
       - name: Deploy data model
-        uses: cognitedata/datamodel-action@main
+        uses: "./.github/actions/datamodel-action"
         with:
           clientId: $COGNITE_ID
           clientSecret: $COGNITE_SECRET
