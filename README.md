@@ -7,6 +7,7 @@ In the environment add the following variables:
 - `COGNITE_CLIENT_ID`
 - `COGNITE_PROJECT`
 - `COGNITE_CLUSTER` (api, westeurope-1, az-eastus-1 etc)
+
 Add a secret named:
 - `COGNITE_CLIENT_SECRET`
 
