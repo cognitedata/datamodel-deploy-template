@@ -32,8 +32,6 @@ def main():
     diff = subprocess.check_output("git diff --name-only HEAD^ HEAD".split(), text=True).split()
     changed_files = set(map(Path, diff))
     
-    print(changed_files)
-
     deploy_all = False
     if deploy_all_folder is not None:
         deploy_all = any(f.is_relative_to(deploy_all_folder) for f in changed_files)
