@@ -40,7 +40,7 @@ def main():
         to_deploy = datamodel_folders
         print("Common folder has one or more changed file(s), will deploy all functions")
     else:
-        to_deploy = [fld for fld in datamodel_folders if any(f.is_relative_to(fld) for f in changed_files)]
+        to_deploy = [fld.replace("datamodels/","") for fld in datamodel_folders if any(f.is_relative_to(fld) for f in changed_files)]
 
     if to_deploy:
         print(f"To be deployed: {to_deploy}")
