@@ -72,12 +72,12 @@ jobs:
         if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
         uses: "./.github/actions/datamodel-action"
         with:
-          clientId: ${{ env.COGNITE_CLIENT_ID }}
+          clientId: ${{ vars.COGNITE_CLIENT_ID }}
           clientSecret: ${{ secrets.COGNITE_CLIENT_SECRET }}
-          cluster: ${{ env.COGNITE_CLUSTER }}
-          tenantId: ${{ env.COGNITE_TENANT_ID }}
+          cluster: ${{ vars.COGNITE_CLUSTER }}
+          tenantId: ${{ vars.COGNITE_TENANT_ID }}
           modelName: ${{ matrix.datamodel }} # external_id
           modelFile: ./datamodels/${{ matrix.datamodel }}/datamodel.graphql
           space: ${{ steps.extract_params.outputs.space }}
-          project: ${{ env.COGNITE_PROJECT }}
+          project: ${{ vars.COGNITE_PROJECT }}
           version: ${{ steps.extract_params.outputs.version }}
