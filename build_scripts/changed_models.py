@@ -20,7 +20,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    datamodel_folders = sorted({f.strip() for f in args.folders[0].split(",")})
+    datamodel_folders = sorted({f"datamodels/{f.strip()}" for f in args.folders[0].split(",")})
     print(f"Input: Folders to consider (re)deploying: {datamodel_folders}")
 
     deploy_all_folder = None
