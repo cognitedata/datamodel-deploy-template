@@ -1,0 +1,39 @@
+name: Publish data models
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_to_eqn:
+    strategy:
+      matrix:
+        eqn_project: [equinor-dev]
+
+    # TODO add more environments (test/prod) later
+    environment: ${{ matrix.eqn_project }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup Node 🔧
+        uses: actions/setup-node@v3
+
+      - name: Install 🔧
+        run: npm install --global @cognite/cdf-cli
+      
+      # add more data models like this:
+      - name: Deploy data model
+        uses: @cognitedata/datamodel-action
+        with:
+          clientId: ${{ secrets.COGNITE_DEV_CLIENT_ID }}
+          clientSecret: ${{ secrets.COGNITE_DEV_CLIENT_SECRET }}
+          cluster: "westeurope-1"
+          tenantId: ""
+          modelName: "" # external_id
+          space: ""
+          project: ${{ matrix.eqn_project }}
+          version: "1"
