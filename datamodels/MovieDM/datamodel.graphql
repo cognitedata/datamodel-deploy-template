@@ -26,5 +26,3 @@ type Movie {
   director: Director
   actors: [Actor]
 }
-
-
