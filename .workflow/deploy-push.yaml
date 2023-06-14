@@ -5,11 +5,27 @@ on:
     branches:
       - main
 
+
 jobs:
-  deploy_to_eqn:
+  generate-matrix:
+    uses: "./.github/workflows/generate-matrix.yaml"
+    with:
+      deploy_folders: "MovieDM"
+      trigger_deploy_all_folders: "common"
+
+  deploy:
+    needs: generate-matrix
+    name: Deploy Cognite data models
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        eqn_project: [equinor-dev]
+        datamodel: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
+        # Add environments to deploy to.
+        # Each environment should have a corresponding github environment with secrets.
+        environment:
+          - test
+
+    environment: ${{ matrix.environment }}
 
     # TODO add more environments (test/prod) later
     environment: ${{ matrix.eqn_project }}
@@ -33,7 +49,8 @@ jobs:
           clientSecret: ${{ secrets.COGNITE_DEV_CLIENT_SECRET }}
           cluster: "westeurope-1"
           tenantId: ""
-          modelName: "" # external_id
+          modelName: $matrix.datamodel # external_id
+          modelFile: ./datamodels/${{ matrix.datamodel }}/datamodel.graphql
           space: ""
-          project: ${{ matrix.eqn_project }}
-          version: "1"
+          project: ${{  }}
+          version: 
