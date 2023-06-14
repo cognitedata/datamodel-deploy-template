@@ -45,7 +45,7 @@ jobs:
         uses: "./.github/actions/datamodel-action"
         with:
           clientId: $COGNITE_CLIENT_ID
-          clientSecret: ${{ secretse.COGNITE_CLIENT_SECRET }}
+          clientSecret: ${{ secrets.COGNITE_CLIENT_SECRET }}
           cluster: $COGNITE_CLUSTER
           tenantId: $COGNITE_TENANT_ID
           modelName: $matrix.datamodel # external_id
