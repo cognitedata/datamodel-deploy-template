@@ -31,6 +31,8 @@ def main():
     # Compare against previous commit under the assumption of squash-only merges:
     diff = subprocess.check_output("git diff --name-only HEAD^ HEAD".split(), text=True).split()
     changed_files = set(map(Path, diff))
+    
+    print(changed_files)
 
     deploy_all = False
     if deploy_all_folder is not None:
