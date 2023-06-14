@@ -39,7 +39,7 @@ jobs:
       
       # add more data models like this:
       - name: Deploy data model
-        uses: @cognitedata/datamodel-action
+        uses: cognitedata/datamodel-action
         with:
           clientId: $COGNITE_ID
           clientSecret: $COGNITE_SECRET
