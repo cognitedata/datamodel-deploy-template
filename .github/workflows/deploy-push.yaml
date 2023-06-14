@@ -28,24 +28,24 @@ jobs:
 
     steps:
       - name: Check out code
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        #if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
         uses: actions/checkout@v3
 
       - name: Setup Node 🔧
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        #if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
         uses: actions/setup-node@v3
 
       - name: Install 🔧
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        #if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
         run: npm install --global @cognite/cdf-cli
       
       # add more data models like this:
       - name: Deploy data model
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
+        #if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
         uses: "./.github/actions/datamodel-action"
         with:
-          clientId: $COGNITE_ID
-          clientSecret: $COGNITE_SECRET
+          clientId: ${{ secrets.COGNITE_CLIENT_ID }}
+          clientSecret: $COGNITE_CLIENT_SECRET
           cluster: $COGNITE_CLUSTER
           tenantId: $COGNITE_TENANT_ID
           modelName: $matrix.datamodel # external_id
