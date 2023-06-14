@@ -42,5 +42,5 @@ jobs:
         shell: bash
         id: make-json
         run: |
-          python build_scripts/changed_functions.py "${{ inputs.deploy_folders }}" "${{ inputs.trigger_deploy_all_folders }}"
+          python build_scripts/changed_models.py "${{ inputs.deploy_folders }}" "${{ inputs.trigger_deploy_all_folders }}"
           cat $GITHUB_OUTPUT
