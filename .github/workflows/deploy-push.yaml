@@ -49,7 +49,7 @@ jobs:
         if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
         shell: bash
         run: |
-          CONFIG_FILES=("datamodels/${{ matrix.datamodel }}/datamodel_config.yaml ${{ matrix.datamodel }}/datamodel_config_${{ matrix.environment }}.yaml")
+          CONFIG_FILES=("datamodels/${{ matrix.datamodel }}/datamodel_config.yaml datamodels/${{ matrix.datamodel }}/datamodel_config_${{ matrix.environment }}.yaml")
           echo "Config files to use are ${CONFIG_FILES[@]}"
           for FILE in ${CONFIG_FILES[@]}
           do

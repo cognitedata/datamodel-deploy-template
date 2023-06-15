@@ -1,5 +1,5 @@
 ---
-externalId: "test-cli-transform-dm" # Required
+externalId: "test-cli-transform-dm_$VERSION" # Required
 name: "test-cli-transform-dm" # Required
 
 shared: true # Optional, default: true
@@ -26,7 +26,7 @@ destination:
      space: $SPACE
      externalId: $MODEL_EXTERNAL_ID
      version: $VERSION
-     destination_type: $MODEL_EXTERNAL_ID
+     destination_type: Product
 
 # when writing instances to a relationship, use the following syntax:
 # NOTE: instanceSpace is optional. If not set, it is a mandatory property(column) in the data
