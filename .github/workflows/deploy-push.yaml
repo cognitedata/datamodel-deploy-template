@@ -111,7 +111,7 @@ jobs:
             # Credentials to be used when running your transformations,
             # as referenced in your manifests:
             COGNITE_CLIENT_ID: ${{ vars.COGNITE_CLIENT_ID }}
-            COGNITE_CLIENT_SECRET: ${{ vars.COGNITE_CLIENT_SECRET }}
+            COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
             COGNITE_TOKEN_URL: https://login.microsoftonline.com/${{ vars.COGNITE_TENANT_ID }}/oauth2/v2.0/token
             COGNITE_CLUSTER: ${{ vars.COGNITE_CLUSTER }}
             COGNITE_PROJECT: ${{ vars.COGNITE_PROJECT }}
