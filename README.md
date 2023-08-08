@@ -11,6 +11,8 @@ In the environment add the following variables:
 Add a secret named:
 - `COGNITE_CLIENT_SECRET`
 
+If you are using non AAD idP like AUTH0 or Keycloak, set the environment variables `COGNITE_TOKEN_URL` and `COGNITE_AUDIENCE` as well (`COGNITE_TENANT_ID` not needed). `deploy-push.yaml` also needs modifications to use these variables (uncomment 4 lines)
+
 
 The `datamodels` folder contains one folder per datamodel. The name of the folder will be the name and externalid of the model. In the folder put a file named `datamodel.graphql` with the schema and a config file named `datamodel_config.yaml` where you can specify specific config for the model. Currently it's `version` and `space` to deploy to. You can also create a file named `datamodel_config_<environment>.yaml` to have environment specific configuration.
 
