@@ -1,6 +1,7 @@
 - externalId: Asset
   name: Asset
   usedFor: node
+  space: <INFORMATION_SPACE>
   properties:
     rootAssetExternalId:
       autoIncrement: false
