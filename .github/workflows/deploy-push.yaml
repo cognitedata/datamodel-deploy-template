@@ -9,8 +9,8 @@ jobs:
   generate-matrix:
     uses: "./.github/workflows/generate-matrix.yaml"
     with:
-      deploy_folders: "MovieDM"
-      trigger_deploy_all_folders: "common"
+      deploy_folders: "models/"
+      trigger_deploy_all_folders: "models/config.yaml"
 
   deploy:
     needs: generate-matrix
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        datamodel: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
+        models: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
         # Add environments to deploy to.
         # Each environment should have a corresponding github environment with secrets.
         environment:

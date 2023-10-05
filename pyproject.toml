@@ -9,6 +9,7 @@ license = "Apache-2.0"
 [tool.poetry.dependencies]
 python = "^3.10"
 cognite-sdk = {version = ">=6.29.0"}
+pyyaml = "^6"
 
 
 [build-system]

@@ -1,0 +1,5 @@
+spaces:
+  information_space:
+    assetInformationSpace: <INFORMATION_SPACE>
+  solution_spaces:
+    pumpSolutionSpace: <PUMP_SOLUTION_SPACE>

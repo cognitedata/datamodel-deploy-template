@@ -3,18 +3,12 @@ import os
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Upload graphql datamodels to CDF")
+    parser = argparse.ArgumentParser(description=" CDF")
     parser.add_argument(
         "--file", required=False,
         type=str)
     parser.add_argument(
         "--path", required=False,
-        type=str)
-    parser.add_argument(
-        "--information-space", required=True,
-        type=str)
-    parser.add_argument(
-        "--solution-space", required=True,
         type=str)
     return parser.parse_args()
 

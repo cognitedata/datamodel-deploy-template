@@ -64,6 +64,7 @@
 - externalId: Pump
   name: Pump
   usedFor: node
+  space: <INFORMATION_SPACE>
   properties:
     maxPower:
       autoIncrement: false
