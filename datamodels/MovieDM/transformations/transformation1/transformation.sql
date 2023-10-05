@@ -1,1 +1,0 @@
-select 1 as key, $SPACE as name, 'asd' as externalId
