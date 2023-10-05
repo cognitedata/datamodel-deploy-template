@@ -84,36 +84,3 @@ jobs:
           version: ${{ steps.extract_params.outputs.version }}
           scopes: https://${{ vars.COGNITE_CLUSTER }}.cognitedata.com/.default
           #audience: ${{ vars.COGNITE_AUDIENCE }} # non AAD
-
-      - name: Replace vars in transformations
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
-        shell: bash
-        run: |
-          python ./build_scripts/replace_vars.py --path ./datamodels/${{ matrix.datamodel }}/transformations --space ${{ steps.extract_params.outputs.space }} --version ${{ steps.extract_params.outputs.version }} --model-external-id ${{ matrix.datamodel }}
-
-
-      - name: Deploy transformations
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.datamodel) }}
-        uses: cognitedata/transformations-cli@main
-        env:
-            # Credentials to be used when running your transformations,
-            # as referenced in your manifests:
-            COGNITE_CLIENT_ID: ${{ vars.COGNITE_CLIENT_ID }}
-            COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
-            COGNITE_TOKEN_URL: https://login.microsoftonline.com/${{ vars.COGNITE_TENANT_ID }}/oauth2/v2.0/token
-            COGNITE_CLUSTER: ${{ vars.COGNITE_CLUSTER }}
-            COGNITE_PROJECT: ${{ vars.COGNITE_PROJECT }}
-            COGNITE_SCOPES: https://${{ vars.COGNITE_CLUSTER }}.cognitedata.com/.default
-        with:
-            path: ./datamodels/${{ matrix.datamodel }}/transformations
-            client-id: ${{ vars.COGNITE_CLIENT_ID }}
-            client-secret: ${{ secrets.COGNITE_CLIENT_SECRET }}
-            cdf-project-name: ${{ vars.COGNITE_PROJECT }}
-            token-url: https://login.microsoftonline.com/${{ vars.COGNITE_TENANT_ID }}/oauth2/v2.0/token
-            #token-url: ${{ vars.COGNITE_TOKEN_URL }}  # alternative for non AAD
-            scopes: https://${{ vars.COGNITE_CLUSTER }}.cognitedata.com/.default
-            # If you are not using the main cluster (europe-west1-1), specify it here:
-            # cluster: greenfield
-            # Audience (for non AAD idps)
-            #audience: ${{ vars.COGNITE_AUDIENCE }} # non AAD
-            

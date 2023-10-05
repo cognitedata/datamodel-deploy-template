@@ -1,5 +1,4 @@
 import argparse
-import json
 import os
 
 
@@ -12,25 +11,20 @@ def parse_args():
         "--path", required=False,
         type=str)
     parser.add_argument(
-        "--space", required=True,
+        "--information-space", required=True,
         type=str)
     parser.add_argument(
-        "--version", required=True,
-        type=str)
-    parser.add_argument(
-        "--model-external-id", required=True,
+        "--solution-space", required=True,
         type=str)
     return parser.parse_args()
 
 
-def process_file(filename, space, version, model_id):
+def process_file(filename,  information_space: str, solution_space: str):
     with open(filename, 'r') as file :
         filedata = file.read()
     
-    newdata = filedata.replace('$SPACE', space)
-    newdata = newdata.replace('$VERSION', version)
-    newdata = newdata.replace('$MODEL_EXTERNAL_ID', model_id)
-    
+    newdata = filedata.replace("<INFORMATION_SPACE>", information_space)
+    newdata = newdata.replace("<PUMP_SOLUTION_SPACE>", solution_space)
 
     if filedata != newdata:
         print(f"Updated {filename}")
@@ -46,11 +40,12 @@ def main():
     if args.path:
         for (dir_path, dir_names, file_names) in os.walk(args.path):
             for file in file_names:
-                process_file(filename=f"{dir_path}/{file}", space=args.space, version=args.version, model_id=args.model_external_id)
+                process_file(filename=f"{dir_path}/{file}", information_space=args.information_space, solution_space=args.solution_space)
     elif args.file:
-                    process_file(filename=args.file, space=args.space, version=args.version, model_id=args.model_external_id)
+                    process_file(filename=args.file, information_space=args.information_space, solution_space=args.solution_space)
     else:
         print("--path or --file required")
+
 
 if __name__ == "__main__":
     main()

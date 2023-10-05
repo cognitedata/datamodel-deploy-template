@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Upload graphql datamodels to CDF")
+    parser = argparse.ArgumentParser(description="Upload models to CDF")
     parser.add_argument(
         "folders",
         type=str,
@@ -20,7 +20,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    datamodel_folders = sorted({f"datamodels/{f.strip()}" for f in args.folders[0].split(",")})
+    datamodel_folders = sorted({f"models/{f.strip()}" for f in args.folders[0].split(",")})
     print(f"Input: Folders to consider (re)deploying: {datamodel_folders}")
 
     deploy_all_folder = None
