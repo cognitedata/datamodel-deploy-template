@@ -1,4 +1,4 @@
-name: Generate datamodel deployment matrix
+name: Generate Model Deployment Matrix
 
 on:
   workflow_call:

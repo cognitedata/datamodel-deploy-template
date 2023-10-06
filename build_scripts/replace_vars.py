@@ -1,56 +1,43 @@
 import argparse
-import json
-import os
+from pathlib import Path
+from yaml import safe_load
+
+REPO_ROOT = Path(__file__).parent.parent
+CONFIG_FILE = (REPO_ROOT / "models" / "config.yaml").relative_to(REPO_ROOT)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Upload graphql datamodels to CDF")
+    parser = argparse.ArgumentParser(description="Update the space variables in files")
     parser.add_argument(
-        "--file", required=False,
-        type=str)
-    parser.add_argument(
-        "--path", required=False,
-        type=str)
-    parser.add_argument(
-        "--space", required=True,
-        type=str)
-    parser.add_argument(
-        "--version", required=True,
-        type=str)
-    parser.add_argument(
-        "--model-external-id", required=True,
-        type=str)
+        "model_path",
+        type=str,
+        nargs=1,
+        help="The path to the yaml file with the model to deploy",
+    )
     return parser.parse_args()
-
-
-def process_file(filename, space, version, model_id):
-    with open(filename, 'r') as file :
-        filedata = file.read()
-    
-    newdata = filedata.replace('$SPACE', space)
-    newdata = newdata.replace('$VERSION', version)
-    newdata = newdata.replace('$MODEL_EXTERNAL_ID', model_id)
-    
-
-    if filedata != newdata:
-        print(f"Updated {filename}")
-        with open(filename, 'w') as file:
-            file.write(newdata)
-    else:
-        print(f"No updates for {filename}")
 
 
 def main():
     args = parse_args()
+    model_path = Path(args.model_path[0])
+    if not model_path.exists() or model_path.suffix != ".yaml":
+        print(f"Input: File, {model_path}, does not exist or is not a yaml file")
+        exit(1)
 
-    if args.path:
-        for (dir_path, dir_names, file_names) in os.walk(args.path):
-            for file in file_names:
-                process_file(filename=f"{dir_path}/{file}", space=args.space, version=args.version, model_id=args.model_external_id)
-    elif args.file:
-                    process_file(filename=args.file, space=args.space, version=args.version, model_id=args.model_external_id)
-    else:
-        print("--path or --file required")
+    config = safe_load(CONFIG_FILE.read_text())
+    if not (values_by_variable := config.get("variables")):
+        print("No space variables to update")
+        exit(0)
+
+    print(
+        f"Updating the following variables {','.join(f'{value}={key}' for key, value in values_by_variable.items())}"
+    )
+    print(f"Updating {model_path}")
+    model_text = model_path.read_text()
+    for key, value in values_by_variable.items():
+        model_text = model_text.replace(value, key)
+    model_path.write_text(model_text)
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,96 @@
+containers:
+  - externalId: Asset
+    name: Asset
+    usedFor: node
+    space: <INFORMATION_SPACE>
+    properties:
+      rootAssetExternalId:
+        autoIncrement: false
+        defaultValue: null
+        description: 'The External ID of the root asset'
+        name: root asset external id
+        nullable: false
+        type:
+          container: null
+          type: direct
+      name:
+        autoIncrement: false
+        defaultValue: null
+        description: 'Asset Name'
+        name: name
+        nullable: false
+        type:
+            collation: ucs_basic
+            list: false
+            type: text
+      description:
+        autoIncrement: false
+        defaultValue: null
+        description: 'Asset Description'
+        name: description
+        nullable: true
+        type:
+          collation: ucs_basic
+          list: false
+          type: text
+      source:
+          autoIncrement: false
+          defaultValue: null
+          description: 'Source of the asset data'
+          name: source
+          nullable: true
+          type:
+              collation: ucs_basic
+              list: false
+              type: text
+      parentExternalId:
+        autoIncrement: false
+        defaultValue: null
+        description: 'The External ID of the parent asset'
+        name: parent asset external id
+        nullable: true
+        type:
+          container: null
+          type: direct
+      type:
+        autoIncrement: false
+        defaultValue: null
+        description: 'The type of asset'
+        name: type
+        nullable: true
+        type:
+          collation: ucs_basic
+          list: false
+          type: text
+  - externalId: Pump
+    name: Pump
+    usedFor: node
+    space: <INFORMATION_SPACE>
+    properties:
+      maxPower:
+        autoIncrement: false
+        defaultValue: null
+        description: 'Maximum power of the pump'
+        name: max power
+        nullable: true
+        type:
+            list: false
+            type: float32
+      maxPressure:
+          autoIncrement: false
+          defaultValue: null
+          description: 'Maximum pressure of the pump'
+          name: max pressure
+          nullable: true
+          type:
+              list: false
+              type: float32
+      maxFlow:
+          autoIncrement: false
+          defaultValue: null
+          description: 'Maximum flow of the pump'
+          name: max flow
+          nullable: true
+          type:
+              list: false
+              type: float32
