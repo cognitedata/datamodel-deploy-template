@@ -3,11 +3,7 @@ import argparse
 
 from cognite.client import CogniteClient
 from pathlib import Path
-from cognite.client.data_classes.data_modeling import (
-    ContainerApply,
-    ViewApply,
-    DataModelApply,
-)
+from cognite.client.data_classes.data_modeling import ContainerApply, DataModelApply
 from cognite.client.exceptions import CogniteAPIError
 from yaml import safe_load
 
@@ -57,14 +53,16 @@ def main():
         else:
             print("Dry run, not deploying containers")
 
-    if views_raw := model.get("views"):
-        views = [ViewApply(**view) for view in views_raw]
-        print(f"Found {len(views)} views to deploy")
+    if data_model := model.get("data_model"):
+        data_model = DataModelApply.load(data_model)
+        print(
+            f"Ready to deploy {data_model.name}, ({data_model.space}, {data_model.external_id})"
+        )
         if not is_dry_run:
-            created = client.data_modeling.views.apply(views)
-            print(f"Created {len(created)} views")
+            created = client.data_modeling.data_models.apply(data_model)
+            print(f"Created {created.name!r} data model")
         else:
-            print("Dry run, not deploying views")
+            print(f"Dry run, not deploying data model: {data_model.name}")
 
 
 if __name__ == "__main__":

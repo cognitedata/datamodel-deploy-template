@@ -1,4 +1,10 @@
-views:
+data_model:
+  space: <PUMP_SOLUTION_SPACE>
+  externalId: pump
+  name: Pump Model
+  description: 'A model for pumps'
+  version: "1"
+  views:
   - externalId: Pump
     name: Pump
     version: 1
