@@ -1,60 +1,60 @@
-# Demo model
-- externalId: Pump
-  name: Pump
-  version: 1
-  space: <PUMP_SOLUTION_SPACE>
-  properties:
-    rootAssetExternalId:
-      container:
-        externalId: Asset
-        space: <INFORMATION_SPACE>
-        type: container
-      containerPropertyIdentifier: rootAssetExternalId
-    name:
-      container:
+views:
+  - externalId: Pump
+    name: Pump
+    version: 1
+    space: <PUMP_SOLUTION_SPACE>
+    properties:
+      rootAssetExternalId:
+        container:
           externalId: Asset
           space: <INFORMATION_SPACE>
           type: container
-      containerPropertyIdentifier: name
-    description:
-      container:
-          externalId: Asset
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: description
-    source:
-      container:
-          externalId: Asset
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: source
-    parentExternalId:
-      container:
-          externalId: Asset
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: parentExternalId
-    type:
-      container:
-          externalId: Asset
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: type
-    maxPower:
-      container:
-          externalId: Pump
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: maxPower
-    maxFlow:
-      container:
-          externalId: Pump
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: maxFlow
-    maxPressure:
-      container:
-          externalId: Pump
-          space: <INFORMATION_SPACE>
-          type: container
-      containerPropertyIdentifier: maxPressure
+        containerPropertyIdentifier: rootAssetExternalId
+      name:
+        container:
+            externalId: Asset
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: name
+      description:
+        container:
+            externalId: Asset
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: description
+      source:
+        container:
+            externalId: Asset
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: source
+      parentExternalId:
+        container:
+            externalId: Asset
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: parentExternalId
+      type:
+        container:
+            externalId: Asset
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: type
+      maxPower:
+        container:
+            externalId: Pump
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: maxPower
+      maxFlow:
+        container:
+            externalId: Pump
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: maxFlow
+      maxPressure:
+        container:
+            externalId: Pump
+            space: <INFORMATION_SPACE>
+            type: container
+        containerPropertyIdentifier: maxPressure

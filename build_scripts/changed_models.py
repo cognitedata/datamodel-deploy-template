@@ -58,7 +58,7 @@ def main():
         changed.is_relative_to(deploy_all)
         for changed, deploy_all in itertools.product(changed_files, deploy_all_folders)
     ):
-        to_deploy = monitor_models
+        to_deploy = ["/".join(model_path.parts) for model_path in monitor_models]
         print(
             "Common folder has one or more changed file(s), will deploy all functions"
         )
@@ -70,7 +70,8 @@ def main():
         ]
 
     if to_deploy:
-        print(f"To be deployed: {to_deploy}")
+        # Green color to make it easier to spot in the logs
+        print(f"\033[92mTo be deployed: {to_deploy}\033[0m")
     else:
         print("No changed folders detected, skipping deployment!")
         to_deploy = ["skipDeploy"]
