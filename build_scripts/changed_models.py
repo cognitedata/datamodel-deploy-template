@@ -63,7 +63,11 @@ def main():
             "Common folder has one or more changed file(s), will deploy all functions"
         )
     else:
-        to_deploy = [changed for changed in changed_files if changed in monitor_models]
+        to_deploy = [
+            "/".join(changed.parts)
+            for changed in changed_files
+            if changed in monitor_models
+        ]
 
     if to_deploy:
         print(f"To be deployed: {to_deploy}")
