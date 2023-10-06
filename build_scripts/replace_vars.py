@@ -1,44 +1,48 @@
 import argparse
-import os
+from pathlib import Path
+from yaml import safe_load
+
+REPO_ROOT = Path(__file__).parent.parent
+CONFIG_FILE = (REPO_ROOT / "models" / "config.yaml").relative_to(REPO_ROOT)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description=" CDF")
+    parser = argparse.ArgumentParser(description="Update the space variables in files")
     parser.add_argument(
-        "--file", required=False,
-        type=str)
-    parser.add_argument(
-        "--path", required=False,
-        type=str)
+        "folders",
+        type=str,
+        nargs=1,
+        help="The folders to monitor for deployment of data models",
+    )
     return parser.parse_args()
-
-
-def process_file(filename,  information_space: str, solution_space: str):
-    with open(filename, 'r') as file :
-        filedata = file.read()
-    
-    newdata = filedata.replace("<INFORMATION_SPACE>", information_space)
-    newdata = newdata.replace("<PUMP_SOLUTION_SPACE>", solution_space)
-
-    if filedata != newdata:
-        print(f"Updated {filename}")
-        with open(filename, 'w') as file:
-            file.write(newdata)
-    else:
-        print(f"No updates for {filename}")
 
 
 def main():
     args = parse_args()
+    check_folders = [Path(f.strip()) for f in args.folders[0].split(",")]
+    if missing := [f for f in check_folders if not f.exists()]:
+        print(f"Input: Folders, {missing}, do not exist")
+        exit(1)
+    monitor_models = [
+        model
+        for folder in check_folders
+        for model in folder.glob("**/*.yaml")
+        if model != CONFIG_FILE
+    ]
+    config = safe_load(CONFIG_FILE.read_text())
+    if not (space_by_variable := config.get("spaces")):
+        print("No space variables to update")
+        exit(0)
 
-    if args.path:
-        for (dir_path, dir_names, file_names) in os.walk(args.path):
-            for file in file_names:
-                process_file(filename=f"{dir_path}/{file}", information_space=args.information_space, solution_space=args.solution_space)
-    elif args.file:
-                    process_file(filename=args.file, information_space=args.information_space, solution_space=args.solution_space)
-    else:
-        print("--path or --file required")
+    print(
+        f"Updating the following space variables {','.join(f'{value}={key}' for key, value in space_by_variable.items())}"
+    )
+    for model in monitor_models:
+        print(f"Updating {model}")
+        model_text = model.read_text()
+        for key, value in space_by_variable.items():
+            model_text = model_text.replace(value, key)
+        model.write_text(model_text)
 
 
 if __name__ == "__main__":

@@ -2,14 +2,12 @@ import os
 import argparse
 
 from cognite.client import CogniteClient
-from argparse import ArgumentParser
+from pathlib import Path
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Deploy Models to CDF")
-    parser.add_argument(
-
-    )
+    parser.add_argument()
 
 
 def main():
@@ -19,11 +17,11 @@ def main():
         tenant_id=os.environ["TENANT_ID"],
         client_id=os.environ["CLIENT_ID"],
         client_secret=os.environ["CLIENT_SECRET"],
-        token_url=os.environ["TOKEN_URL"])
-
-
+        token_url=os.environ["TOKEN_URL"],
+    )
 
     client.data_modeling.containers.apply()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

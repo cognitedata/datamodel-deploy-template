@@ -41,7 +41,7 @@ def main():
         for model in folder.glob("**/*.yaml")
         if model != CONFIG_FILE
     }
-    print("Found {len(monitor_models)} models to monitor for deployment")
+    print(f"Found {len(monitor_models)} models to monitor for deployment")
 
     deploy_all_folders = []
     if args.deploy_all:
