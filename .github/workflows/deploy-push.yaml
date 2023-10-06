@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "models/**"
 
 jobs:
   generate-matrix:
@@ -20,7 +22,7 @@ jobs:
       matrix:
         models: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
         # Add environments to deploy to.
-        # Each environment should have a corresponding github environment with secrets.
+        # Each environment should have a corresponding GitHub environment with secrets.
         environment:
           - test
 
