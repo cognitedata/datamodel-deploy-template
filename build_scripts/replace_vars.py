@@ -25,16 +25,16 @@ def main():
         exit(1)
 
     config = safe_load(CONFIG_FILE.read_text())
-    if not (space_by_variable := config.get("spaces")):
+    if not (values_by_variable := config.get("variables")):
         print("No space variables to update")
         exit(0)
 
     print(
-        f"Updating the following space variables {','.join(f'{value}={key}' for key, value in space_by_variable.items())}"
+        f"Updating the following variables {','.join(f'{value}={key}' for key, value in values_by_variable.items())}"
     )
     print(f"Updating {model_path}")
     model_text = model_path.read_text()
-    for key, value in space_by_variable.items():
+    for key, value in values_by_variable.items():
         model_text = model_text.replace(value, key)
     model_path.write_text(model_text)
 

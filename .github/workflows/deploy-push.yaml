@@ -1,4 +1,4 @@
-name: Publish data models
+name: Publish data model
 on:
   workflow_dispatch:
   push:
